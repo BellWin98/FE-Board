@@ -25,7 +25,10 @@ const HomePage: React.FC = () => {
         categoryId: selectedCategory ?? undefined,
         sort: 'newest',
       }),
+    select: (data) => data.content,  // 중첩 구조에서 필요한 부분만 추출
   });
+
+  console.log(latestPostsData);
 
   // 인기 게시글 조회
   const {
@@ -41,6 +44,7 @@ const HomePage: React.FC = () => {
         categoryId: selectedCategory ?? undefined,
         sort: 'popular',
       }),
+    select: (data) => data.content,
   });
 
   // 카테고리 목록 조회
@@ -102,10 +106,10 @@ const HomePage: React.FC = () => {
                   <h3 className="font-semibold text-lg line-clamp-1">{post.title}</h3>
                   <div className="flex items-center text-sm text-gray-500 dark:text-gray-400 mt-1">
                     <span className="bg-primary-100 dark:bg-primary-900 text-primary-800 dark:text-primary-200 px-2 py-0.5 rounded text-xs">
-                      {post.category.name}
+                      카테고리 이름
                     </span>
                     <span className="mx-2">•</span>
-                    <span>{post.author.username}</span>
+                    <span>{post.authorId}</span>
                     <span className="mx-2">•</span>
                     <span>{formatDate(post.createdAt)}</span>
                   </div>
@@ -126,7 +130,7 @@ const HomePage: React.FC = () => {
                         d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
                       />
                     </svg>
-                    {post.views}
+                    {post.viewCount}
                   </div>
                   <div className="flex items-center">
                     <svg className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -204,7 +208,7 @@ const HomePage: React.FC = () => {
               더보기
             </Link>
           </div>
-          {renderPostList(latestPostsData?.data?.content, isLatestPostsLoading, latestPostsError)}
+          {renderPostList(latestPostsData, isLatestPostsLoading, latestPostsError)}
         </div>
 
         {/* 인기 게시물 */}
@@ -215,7 +219,7 @@ const HomePage: React.FC = () => {
               더보기
             </Link>
           </div>
-          {renderPostList(popularPostsData?.data?.content, isPopularPostsLoading, popularPostsError)}
+          {renderPostList(popularPostsData, isPopularPostsLoading, popularPostsError)}
         </div>
       </div>
     </div>

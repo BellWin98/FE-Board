@@ -37,7 +37,7 @@ export interface User {
     id: number;
     title: string;
     content: string;
-    views: number;
+    viewCount: number;
     categoryId: number;
     category: Category;
     author: User;
