@@ -182,7 +182,7 @@ const HomePage: React.FC = () => {
         {isCategoriesLoading ? (
           <Spinner size="sm" />
         ) : (
-          categoriesData?.data.map((category: Category) => (
+          categoriesData?.data?.map((category: Category) => (
             <button
               key={category.id}
               className={`px-3 py-1.5 rounded-full text-sm font-medium ${

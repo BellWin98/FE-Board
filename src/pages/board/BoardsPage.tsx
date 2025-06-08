@@ -160,7 +160,7 @@ const BoardsPage: React.FC = () => {
             {isCategoriesLoading ? (
               <Spinner size="sm" />
             ) : (
-              categoriesData?.data.map((category: Category) => (
+              categoriesData?.data?.map((category: Category) => (
                 <button
                   key={category.id}
                   className={`px-3 py-1.5 rounded-full text-sm font-medium ${
@@ -305,7 +305,7 @@ const BoardsPage: React.FC = () => {
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                        {post.views}
+                        {post.viewCount}
                       </td>
                     </tr>
                   ))}
@@ -317,7 +317,7 @@ const BoardsPage: React.FC = () => {
             {postsData?.data?.totalPages > 1 && (
               <Pagination
                 currentPage={currentPage}
-                totalPages={postsData.data.totalPages}
+                totalPages={postsData?.data?.totalPages}
                 onPageChange={handlePageChange}
               />
             )}
