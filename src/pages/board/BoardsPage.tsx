@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import type { Post, Category } from '../../types/models';
+import type { Post, Category, PageResponse } from '../../types/models';
 import postService from '../../services/postService';
 import categoryService from '../../services/categoryService';
 import Card from '../../components/ui/Card';
@@ -58,8 +58,7 @@ const BoardsPage: React.FC = () => {
     data: postsData,
     isLoading: isPostsLoading,
     error: postsError,
-    refetch: refetchPosts,
-  } = useQuery({
+  } = useQuery<PageResponse<Post>>({
     queryKey: ['posts', currentPage, selectedCategory, sortBy, searchTerm],
     queryFn: () =>
       postService.getPosts({
@@ -69,7 +68,7 @@ const BoardsPage: React.FC = () => {
         sort: sortBy,
         search: searchTerm || undefined,
       }),
-    keepPreviousData: true,
+    placeholderData: (previousData) => previousData,
   });
 
   // 카테고리 목록 조회
@@ -160,7 +159,7 @@ const BoardsPage: React.FC = () => {
             {isCategoriesLoading ? (
               <Spinner size="sm" />
             ) : (
-              categoriesData?.data?.map((category: Category) => (
+              categoriesData?.map((category: Category) => (
                 <button
                   key={category.id}
                   className={`px-3 py-1.5 rounded-full text-sm font-medium ${
@@ -228,7 +227,7 @@ const BoardsPage: React.FC = () => {
           <div className="text-center py-10 text-red-500">
             게시글을 불러오는 중 오류가 발생했습니다.
           </div>
-        ) : postsData?.data?.content?.length === 0 ? (
+        ) : postsData?.content?.length === 0 ? (
           <div className="text-center py-16 text-gray-500 dark:text-gray-400">
             게시글이 없습니다.
           </div>
@@ -271,7 +270,7 @@ const BoardsPage: React.FC = () => {
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
-                  {postsData?.data?.content.map((post: Post) => (
+                  {postsData?.content.map((post: Post) => (
                     <tr
                       key={post.id}
                       className="hover:bg-gray-50 dark:hover:bg-gray-750 cursor-pointer"
@@ -296,7 +295,7 @@ const BoardsPage: React.FC = () => {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="text-sm text-gray-700 dark:text-gray-300">
-                          {post.author.username}
+                          {post.author.nickname}
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
@@ -314,10 +313,10 @@ const BoardsPage: React.FC = () => {
             </div>
 
             {/* 페이지네이션 */}
-            {postsData?.data?.totalPages > 1 && (
+            {postsData?.totalPages && postsData.totalPages > 1 && (
               <Pagination
                 currentPage={currentPage}
-                totalPages={postsData?.data?.totalPages}
+                totalPages={postsData.totalPages}
                 onPageChange={handlePageChange}
               />
             )}

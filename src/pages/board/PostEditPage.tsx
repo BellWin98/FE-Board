@@ -4,7 +4,7 @@ import { useQuery, useMutation } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import type { UpdatePostRequest, Category } from '../../types/models';
+import type { UpdatePostRequest, Category, Post } from '../../types/models';
 import postService from '../../services/postService';
 import categoryService from '../../services/categoryService';
 import { useAuth } from '../../contexts/AuthContext';
@@ -57,16 +57,13 @@ const PostEditPage: React.FC = () => {
 
   // 게시글 상세 조회
   const {
-    data: postData,
     isLoading: isPostLoading,
     error: postError,
-  } = useQuery({
+  } = useQuery<Post>({
     queryKey: ['post', postId],
-    queryFn: () => postService.getPost(Number(postId)),
-    enabled: !!postId,
-    onSuccess: (response) => {
-      // 폼 초기값 설정
-      const post = response.data;
+    queryFn: async () => {
+      const response = await postService.getPost(Number(postId));
+      const post = response;
       reset({
         title: post.title,
         content: post.content,
@@ -78,7 +75,9 @@ const PostEditPage: React.FC = () => {
         toast.error('수정 권한이 없습니다.');
         navigate(`/posts/${postId}`);
       }
+      return response;
     },
+    enabled: !!postId,
   });
 
   // 카테고리 목록 조회
@@ -115,10 +114,10 @@ const PostEditPage: React.FC = () => {
   };
 
   // 카테고리 옵션 생성
-  const categoryOptions: SelectOption[] = categoriesData?.data
+  const categoryOptions: SelectOption[] = categoriesData
     ? [
         { value: '', label: '카테고리 선택' },
-        ...categoriesData.data.map((category: Category) => ({
+        ...categoriesData.map((category: Category) => ({
           value: category.id.toString(),
           label: category.name,
         })),

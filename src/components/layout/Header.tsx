@@ -205,7 +205,7 @@ const Header: React.FC = () => {
               {isAuthenticated && user && (
                 <div className="ml-3">
                   <div className="text-base font-medium text-gray-800 dark:text-white">
-                    {user.username}
+                    {user.nickname}
                   </div>
                   <div className="text-sm font-medium text-gray-500 dark:text-gray-400">
                     {user.email}

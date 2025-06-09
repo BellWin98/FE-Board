@@ -28,7 +28,7 @@ const PostDetailPage: React.FC = () => {
   const navigate = useNavigate();
   const { isAuthenticated, user } = useAuth();
   const queryClient = useQueryClient();
-  const [replyTo, setReplyTo] = useState<{ id: number; username: string } | null>(null);
+  const [replyTo, setReplyTo] = useState<{ id: number; nickname: string } | null>(null);
 
   // React Hook Form 초기화
   const {
@@ -50,12 +50,13 @@ const PostDetailPage: React.FC = () => {
     error: postError,
   } = useQuery({
     queryKey: ['post', postId],
-    queryFn: () => postService.getPost(Number(postId)),
-    enabled: !!postId,
-    onSuccess: () => {
+    queryFn: async () => {
+      const result = await postService.getPost(Number(postId));
       // 조회수 증가 API 호출
       postService.incrementViews(Number(postId));
+      return result;
     },
+    enabled: !!postId,
   });
 
   // 댓글 목록 조회
@@ -74,7 +75,7 @@ const PostDetailPage: React.FC = () => {
     mutationFn: () => postService.addBookmark(Number(postId)),
     onSuccess: () => {
       toast.success('북마크가 추가되었습니다.');
-      queryClient.invalidateQueries(['post', postId]);
+      queryClient.invalidateQueries({ queryKey: ['post', postId] });
     },
     onError: () => {
       toast.error('북마크 추가에 실패했습니다.');
@@ -86,7 +87,7 @@ const PostDetailPage: React.FC = () => {
     mutationFn: () => postService.removeBookmark(Number(postId)),
     onSuccess: () => {
       toast.success('북마크가 제거되었습니다.');
-      queryClient.invalidateQueries(['post', postId]);
+      queryClient.invalidateQueries({ queryKey: ['post', postId] });
     },
     onError: () => {
       toast.error('북마크 제거에 실패했습니다.');
@@ -100,7 +101,7 @@ const PostDetailPage: React.FC = () => {
       toast.success('댓글이 작성되었습니다.');
       reset();
       setReplyTo(null);
-      queryClient.invalidateQueries(['comments', postId]);
+      queryClient.invalidateQueries({ queryKey: ['comments', postId] });
     },
     onError: () => {
       toast.error('댓글 작성에 실패했습니다.');
@@ -112,7 +113,7 @@ const PostDetailPage: React.FC = () => {
     mutationFn: (commentId: number) => commentService.deleteComment(commentId),
     onSuccess: () => {
       toast.success('댓글이 삭제되었습니다.');
-      queryClient.invalidateQueries(['comments', postId]);
+      queryClient.invalidateQueries({ queryKey: ['comments', postId] });
     },
     onError: () => {
       toast.error('댓글 삭제에 실패했습니다.');
@@ -139,7 +140,7 @@ const PostDetailPage: React.FC = () => {
       return;
     }
 
-    const post = postData?.data;
+    const post = postData;
     if (post?.bookmarked) {
       removeBookmark();
     } else {
@@ -178,7 +179,7 @@ const PostDetailPage: React.FC = () => {
     } else {
       setReplyTo({
         id: comment.id,
-        username: comment.author.username,
+        nickname: comment.author.nickname,
       });
       // 답글 폼으로 스크롤
       setTimeout(() => {
@@ -231,7 +232,7 @@ const PostDetailPage: React.FC = () => {
     );
   }
 
-  const post = postData?.data;
+  const post = postData;
 
   if (!post) {
     return (
@@ -255,7 +256,7 @@ const PostDetailPage: React.FC = () => {
     >
       <div className="flex justify-between">
         <div className="flex items-center mb-2">
-          <div className="font-medium">{comment.author.username}</div>
+          <div className="font-medium">{comment.author.nickname}</div>
           <div className="ml-2 text-sm text-gray-500 dark:text-gray-400">
             {formatDate(comment.createdAt)}
           </div>
@@ -340,7 +341,7 @@ const PostDetailPage: React.FC = () => {
             
             <div className="flex justify-between items-center mb-6">
               <div className="flex items-center">
-                <span className="font-medium">{post.author.username}</span>
+                <span className="font-medium">{post.author.nickname}</span>
                 <span className="mx-2 text-gray-500 dark:text-gray-400">•</span>
                 <span className="text-gray-500 dark:text-gray-400">{formatDate(post.createdAt)}</span>
               </div>
@@ -360,7 +361,7 @@ const PostDetailPage: React.FC = () => {
                       d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
                     />
                   </svg>
-                  {post.views}
+                  {post.viewCount}
                 </div>
                 <div className="flex items-center">
                   <svg className="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -414,7 +415,7 @@ const PostDetailPage: React.FC = () => {
               {replyTo && (
                 <div className="mb-2 flex items-center justify-between bg-gray-50 dark:bg-gray-700 p-2 rounded">
                   <span>
-                    <span className="font-medium">{replyTo.username}</span>님에게 답글 작성 중
+                    <span className="font-medium">{replyTo.nickname}</span>님에게 답글 작성 중
                   </span>
                   <button
                     type="button"
@@ -456,13 +457,13 @@ const PostDetailPage: React.FC = () => {
             <div className="text-center py-8 text-red-500">
               댓글을 불러오는 중 오류가 발생했습니다.
             </div>
-          ) : commentsData?.data?.content?.length === 0 ? (
+          ) : commentsData?.content?.length === 0 ? (
             <div className="text-center py-8 text-gray-500 dark:text-gray-400">
               아직 댓글이 없습니다. 첫 댓글을 작성해보세요!
             </div>
           ) : (
             <div className="space-y-2">
-              {commentsData?.data?.content
+              {commentsData?.content
                 ?.filter((comment: Comment) => !comment.parentId) // 루트 댓글만 필터링
                 .map((comment: Comment) => renderComment(comment))}
             </div>

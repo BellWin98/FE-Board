@@ -48,9 +48,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
           if (storedUser) {
             // 세션 유효성 검증 (선택적)
             try {
-              const { data } = await authService.getCurrentUser();
-              setUser(data);
+              const currentUser = await authService.getCurrentUser();
+              setUser(currentUser);
             } catch (error) {
+              console.error(error);
               // 토큰이 유효하지 않으면 로그아웃
               authService.logout();
               setUser(null);
@@ -62,6 +63,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         }
       } catch (err) {
         setError('인증 초기화 중 오류가 발생했습니다.');
+        console.error(err);
         authService.logout();
       } finally {
         setLoading(false);
@@ -77,10 +79,11 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     setError(null);
     try {
       const response = await authService.login(credentials);
-      setUser(response.data.user);
+      setUser(response.user);
       toast.success('로그인되었습니다.');
       return true;
     } catch (err) {
+      console.error(err);
       setError('로그인에 실패했습니다. 이메일과 비밀번호를 확인해주세요.');
       return false;
     } finally {
@@ -97,6 +100,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       toast.success('회원가입이 완료되었습니다. 로그인해주세요.');
       return true;
     } catch (err) {
+      console.error(err);
       setError('회원가입에 실패했습니다. 다시 시도해주세요.');
       return false;
     } finally {
@@ -117,14 +121,15 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     setError(null);
     try {
       const response = await authService.updateProfile(userData);
-      setUser(response.data);
+      setUser(response);
       toast.success('프로필이 업데이트되었습니다.');
       
       // 로컬 스토리지의 사용자 정보 업데이트
-      localStorage.setItem('user', JSON.stringify(response.data));
+      localStorage.setItem('user', JSON.stringify(response));
       
       return true;
     } catch (err) {
+      console.error(err);
       setError('프로필 업데이트에 실패했습니다.');
       return false;
     } finally {

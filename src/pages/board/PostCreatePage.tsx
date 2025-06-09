@@ -65,7 +65,7 @@ const PostCreatePage: React.FC = () => {
     mutationFn: (data: CreatePostRequest) => postService.createPost(data),
     onSuccess: (response) => {
       toast.success('게시글이 작성되었습니다.');
-      navigate(`/posts/${response.data.id}`);
+      navigate(`/posts/${response.id}`);
     },
     onError: () => {
       toast.error('게시글 작성에 실패했습니다.');
@@ -84,10 +84,10 @@ const PostCreatePage: React.FC = () => {
   };
 
   // 카테고리 옵션 생성
-  const categoryOptions: SelectOption[] = categoriesData?.data
+  const categoryOptions: SelectOption[] = categoriesData
     ? [
         { value: '', label: '카테고리 선택' },
-        ...categoriesData.data.map((category: Category) => ({
+        ...categoriesData.map((category: Category) => ({
           value: category.id.toString(),
           label: category.name,
         })),

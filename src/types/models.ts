@@ -2,7 +2,7 @@
 export interface User {
     id: number;
     email: string;
-    username: string;
+    nickname: string;
     profileImage?: string;
     role: 'USER' | 'ADMIN';
     createdAt: string;
@@ -18,7 +18,7 @@ export interface User {
   // 회원가입 요청 모델
   export interface RegisterRequest {
     email: string;
-    username: string;
+    nickname: string;
     password: string;
     confirmPassword: string;
   }
@@ -107,13 +107,6 @@ export interface User {
     first: boolean;
     last: boolean;
     empty: boolean;
-  }
-  
-  // API 응답 모델
-  export interface ApiResponse<T> {
-    success: boolean;
-    message: string;
-    data: T;
   }
   
   // 북마크 모델

@@ -20,7 +20,7 @@ const adminUserService = {
         const users = Array.from({ length: 50 }, (_, i) => ({
           id: i + 1,
           email: `user${i + 1}@example.com`,
-          username: `user${i + 1}`,
+          nickname: `user${i + 1}`,
           profileImage: null,
           role: i < 5 ? 'ADMIN' : 'USER',
           createdAt: new Date(2025, 0, 1 + i).toISOString(),
@@ -31,7 +31,7 @@ const adminUserService = {
         const filteredUsers = search
           ? users.filter(
               (user) =>
-                user.username.toLowerCase().includes(search.toLowerCase()) ||
+                user.nickname.toLowerCase().includes(search.toLowerCase()) ||
                 user.email.toLowerCase().includes(search.toLowerCase())
             )
           : users;
@@ -264,17 +264,17 @@ const UserManagement: React.FC = () => {
                             <img
                               className="h-10 w-10 rounded-full object-cover"
                               src={user.profileImage}
-                              alt={user.username}
+                              alt={user.nickname}
                             />
                           ) : (
                             <div className="h-10 w-10 rounded-full bg-primary-100 dark:bg-primary-800 flex items-center justify-center text-primary-600 dark:text-primary-300 font-semibold">
-                              {user.username.charAt(0).toUpperCase()}
+                              {user.nickname.charAt(0).toUpperCase()}
                             </div>
                           )}
                         </div>
                         <div className="ml-4">
                           <div className="text-sm font-medium text-gray-900 dark:text-gray-100">
-                            {user.username}
+                            {user.nickname}
                           </div>
                           <div className="text-sm text-gray-500 dark:text-gray-400">
                             ID: {user.id}

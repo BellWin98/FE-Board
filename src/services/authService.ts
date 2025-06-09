@@ -1,26 +1,26 @@
 import apiClient from './api';
-import type { LoginRequest, RegisterRequest, User, ApiResponse } from '../types/models';
+import type { LoginRequest, RegisterRequest, User } from '../types/models';
 
 // 사용자 인증 관련 API 서비스
 export const authService = {
   // 로그인
-  async login(credentials: LoginRequest): Promise<ApiResponse<{ token: string; user: User }>> {
-    const response = await apiClient.post<ApiResponse<{ token: string; user: User }>>(
+  async login(credentials: LoginRequest): Promise<{ accessToken: string; user: User }> {
+    const response = await apiClient.post<{ accessToken: string; user: User }>(
       '/auth/login',
       credentials
     );
     
     // 응답에서 토큰과 사용자 정보를 추출하여 로컬 스토리지에 저장
-    const { token, user } = response.data.data;
-    localStorage.setItem('authToken', token);
+    const { accessToken, user } = response.data;
+    localStorage.setItem('authToken', accessToken);
     localStorage.setItem('user', JSON.stringify(user));
     
     return response.data;
   },
   
   // 회원가입
-  async register(userData: RegisterRequest): Promise<ApiResponse<User>> {
-    const response = await apiClient.post<ApiResponse<User>>('/auth/register', userData);
+  async register(userData: RegisterRequest): Promise<User> {
+    const response = await apiClient.post<User>('/auth/register', userData);
     return response.data;
   },
   
@@ -31,14 +31,14 @@ export const authService = {
   },
   
   // 현재 사용자 정보 조회
-  async getCurrentUser(): Promise<ApiResponse<User>> {
-    const response = await apiClient.get<ApiResponse<User>>('/auth/me');
+  async getCurrentUser(): Promise<User> {
+    const response = await apiClient.get<User>('/auth/me');
     return response.data;
   },
   
   // 비밀번호 변경
-  async changePassword(oldPassword: string, newPassword: string): Promise<ApiResponse<void>> {
-    const response = await apiClient.post<ApiResponse<void>>('/auth/change-password', {
+  async changePassword(oldPassword: string, newPassword: string): Promise<void> {
+    const response = await apiClient.post<void>('/auth/change-password', {
       oldPassword,
       newPassword,
     });
@@ -46,8 +46,8 @@ export const authService = {
   },
   
   // 프로필 업데이트
-  async updateProfile(userData: Partial<User>): Promise<ApiResponse<User>> {
-    const response = await apiClient.put<ApiResponse<User>>('/auth/profile', userData);
+  async updateProfile(userData: Partial<User>): Promise<User> {
+    const response = await apiClient.put<User>('/auth/profile', userData);
     return response.data;
   },
   

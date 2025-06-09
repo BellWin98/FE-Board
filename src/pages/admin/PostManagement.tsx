@@ -36,7 +36,7 @@ const adminPostService = {
           author: {
             id: (i % 20) + 1,
             email: `user${(i % 20) + 1}@example.com`,
-            username: `user${(i % 20) + 1}`,
+            nickname: `user${(i % 20) + 1}`,
             profileImage: null,
             role: i % 20 < 2 ? 'ADMIN' : 'USER',
             createdAt: new Date().toISOString(),
@@ -62,7 +62,7 @@ const adminPostService = {
             (post) =>
               post.title.toLowerCase().includes(searchLower) ||
               post.content.toLowerCase().includes(searchLower) ||
-              post.author.username.toLowerCase().includes(searchLower)
+              post.author.nickname.toLowerCase().includes(searchLower)
           );
         }
         
@@ -350,7 +350,7 @@ const PostManagement: React.FC = () => {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm text-gray-900 dark:text-gray-100">
-                        {post.author.username}
+                        {post.author.nickname}
                       </div>
                       <div className="text-xs text-gray-500 dark:text-gray-400">
                         {post.author.email}

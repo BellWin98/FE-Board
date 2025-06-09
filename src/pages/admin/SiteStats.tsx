@@ -27,11 +27,11 @@ const adminService = {
               { id: 5, name: '토론게시판', postCount: 99 },
             ],
             recentActivity: [
-              { type: 'post', username: 'user123', action: '새 게시글 작성', timestamp: '2025-05-12T10:30:00Z' },
-              { type: 'comment', username: 'john_doe', action: '댓글 작성', timestamp: '2025-05-12T10:15:00Z' },
-              { type: 'user', username: 'new_user', action: '회원가입', timestamp: '2025-05-12T09:45:00Z' },
-              { type: 'post', username: 'admin', action: '공지사항 작성', timestamp: '2025-05-12T09:30:00Z' },
-              { type: 'comment', username: 'jane_smith', action: '댓글 작성', timestamp: '2025-05-12T09:15:00Z' },
+              { type: 'post', nickname: 'user123', action: '새 게시글 작성', timestamp: '2025-05-12T10:30:00Z' },
+              { type: 'comment', nickname: 'john_doe', action: '댓글 작성', timestamp: '2025-05-12T10:15:00Z' },
+              { type: 'user', nickname: 'new_user', action: '회원가입', timestamp: '2025-05-12T09:45:00Z' },
+              { type: 'post', nickname: 'admin', action: '공지사항 작성', timestamp: '2025-05-12T09:30:00Z' },
+              { type: 'comment', nickname: 'jane_smith', action: '댓글 작성', timestamp: '2025-05-12T09:15:00Z' },
             ],
           }
         });
@@ -77,7 +77,7 @@ const SiteStats: React.FC = () => {
     );
   }
 
-  const stats = statsData?.data;
+  const stats = statsData;
 
   return (
     <div className="space-y-6">
@@ -211,7 +211,7 @@ const SiteStats: React.FC = () => {
                 </div>
                 <div className="flex-grow">
                   <div className="flex items-center">
-                    <span className="font-medium text-gray-900 dark:text-gray-100">{activity.username}</span>
+                    <span className="font-medium text-gray-900 dark:text-gray-100">{activity.nickname}</span>
                     <span className="mx-2 text-gray-400">•</span>
                     <span className="text-sm text-gray-500 dark:text-gray-400">{activity.action}</span>
                   </div>

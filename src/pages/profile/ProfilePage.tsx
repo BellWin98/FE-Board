@@ -10,7 +10,7 @@ import { useNavigate } from 'react-router-dom';
 
 // 프로필 업데이트 폼 유효성 검사 스키마
 const profileSchema = z.object({
-  username: z
+  nickname: z
     .string()
     .min(2, '사용자 이름은 최소 2자 이상이어야 합니다.')
     .max(30, '사용자 이름은 최대 30자까지 가능합니다.'),
@@ -52,7 +52,7 @@ const ProfilePage: React.FC = () => {
   } = useForm<ProfileFormValues>({
     resolver: zodResolver(profileSchema),
     defaultValues: {
-      username: user?.username || '',
+      nickname: user?.nickname || '',
       profileImage: user?.profileImage || '',
     },
   });
@@ -80,7 +80,7 @@ const ProfilePage: React.FC = () => {
     setIsProfileLoading(true);
     try {
       const success = await updateUserProfile({
-        username: data.username,
+        nickname: data.nickname,
         profileImage: data.profileImage,
       });
       
@@ -90,6 +90,7 @@ const ProfilePage: React.FC = () => {
         });
       }
     } catch (error) {
+      console.error(error);
       setProfileError('root', {
         message: '프로필 업데이트 중 오류가 발생했습니다.',
       });
@@ -107,6 +108,7 @@ const ProfilePage: React.FC = () => {
       await new Promise(resolve => setTimeout(resolve, 1000));
       resetPassword();
     } catch (error) {
+      console.error(error);
       setPasswordError('root', {
         message: '비밀번호 변경 중 오류가 발생했습니다.',
       });
@@ -152,7 +154,7 @@ const ProfilePage: React.FC = () => {
               <div className="relative">
                 <img
                   src={user.profileImage || 'https://via.placeholder.com/150'}
-                  alt={user.username}
+                  alt={user.nickname}
                   className="h-32 w-32 rounded-full object-cover border-4 border-white dark:border-gray-800 shadow-md"
                 />
                 <button
@@ -175,7 +177,7 @@ const ProfilePage: React.FC = () => {
                   </svg>
                 </button>
               </div>
-              <h2 className="mt-4 text-xl font-semibold">{user.username}</h2>
+              <h2 className="mt-4 text-xl font-semibold">{user.nickname}</h2>
               <p className="text-gray-500 dark:text-gray-400">{user.email}</p>
               <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
                 가입일: {new Date(user.createdAt).toLocaleDateString()}
@@ -225,8 +227,8 @@ const ProfilePage: React.FC = () => {
                 <Input
                   label="사용자 이름"
                   type="text"
-                  {...registerProfile('username')}
-                  error={profileErrors.username?.message}
+                  {...registerProfile('nickname')}
+                  error={profileErrors.nickname?.message}
                 />
 
                 <Input

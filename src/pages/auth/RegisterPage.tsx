@@ -12,7 +12,7 @@ import Card from '../../components/ui/Card';
 // 회원가입 폼 유효성 검사 스키마
 const registerSchema = z
   .object({
-    username: z
+    nickname: z
       .string()
       .min(2, '사용자 이름은 최소 2자 이상이어야 합니다.')
       .max(30, '사용자 이름은 최대 30자까지 가능합니다.'),
@@ -42,7 +42,7 @@ const RegisterPage: React.FC = () => {
   } = useForm<RegisterFormValues>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
-      username: '',
+      nickname: '',
       email: '',
       password: '',
       confirmPassword: '',
@@ -54,7 +54,7 @@ const RegisterPage: React.FC = () => {
     setIsLoading(true);
     try {
       const registerData: RegisterRequest = {
-        username: data.username,
+        nickname: data.nickname,
         email: data.email,
         password: data.password,
         confirmPassword: data.confirmPassword,
@@ -70,6 +70,7 @@ const RegisterPage: React.FC = () => {
         });
       }
     } catch (error) {
+      console.error(error);
       setError('root', {
         message: '회원가입 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.',
       });
@@ -96,8 +97,8 @@ const RegisterPage: React.FC = () => {
             <Input
               label="사용자 이름"
               type="text"
-              {...register('username')}
-              error={errors.username?.message}
+              {...register('nickname')}
+              error={errors.nickname?.message}
               placeholder="사용자 이름을 입력하세요"
               icon={
                 <svg className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">

@@ -144,7 +144,7 @@ const MyPostsPage: React.FC = () => {
           <div className="text-center py-10 text-red-500">
             게시글을 불러오는 중 오류가 발생했습니다.
           </div>
-        ) : postsData?.data?.content?.length === 0 ? (
+        ) : postsData?.content?.length === 0 ? (
           <Card className="p-8 text-center">
             <div className="text-gray-500 dark:text-gray-400 mb-4">
               작성한 게시글이 없습니다.
@@ -155,7 +155,7 @@ const MyPostsPage: React.FC = () => {
           </Card>
         ) : (
           <div className="space-y-4">
-            {postsData?.data?.content.map((post: Post) => (
+            {postsData?.content.map((post: Post) => (
               <Card key={post.id} className="p-6">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                   <div>
@@ -191,7 +191,7 @@ const MyPostsPage: React.FC = () => {
                             d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
                           />
                         </svg>
-                        조회 {post.views}
+                        조회 {post.viewCount}
                       </div>
                       <div className="flex items-center">
                         <svg className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -230,10 +230,10 @@ const MyPostsPage: React.FC = () => {
         )}
 
         {/* 페이지네이션 */}
-        {postsData?.data?.totalPages > 1 && (
+        {postsData?.totalPages && postsData.totalPages > 1 && (
           <Pagination
             currentPage={currentPage}
-            totalPages={postsData.data.totalPages}
+            totalPages={postsData.totalPages}
             onPageChange={handlePageChange}
           />
         )}

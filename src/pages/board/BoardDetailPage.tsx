@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, useSearchParams, Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import type { Post, Category } from '../../types/models';
+import type { Post, Category, PageResponse } from '../../types/models';
 import postService from '../../services/postService';
 import categoryService from '../../services/categoryService';
 import Input from '../../components/ui/Input';
@@ -64,7 +64,7 @@ const BoardDetailPage: React.FC = () => {
     data: postsData,
     isLoading: isPostsLoading,
     error: postsError,
-  } = useQuery({
+  } = useQuery<PageResponse<Post>>({
     queryKey: ['posts', categoryId, currentPage, sortBy, searchTerm],
     queryFn: () =>
       postService.getPosts({
@@ -74,7 +74,7 @@ const BoardDetailPage: React.FC = () => {
         sort: sortBy,
         search: searchTerm || undefined,
       }),
-    keepPreviousData: true,
+    placeholderData: (previousData) => previousData,
     enabled: !!categoryId,
   });
 
@@ -148,7 +148,7 @@ const BoardDetailPage: React.FC = () => {
     );
   }
 
-  const category = categoryData?.data;
+  const category = categoryData;
 
   return (
     <div className="space-y-6">
@@ -158,9 +158,9 @@ const BoardDetailPage: React.FC = () => {
           <div>
             <h1 className="text-2xl font-bold">{category?.name}</h1>
             <p className="text-gray-600 dark:text-gray-400 mt-1">{category?.description}</p>
-            {!isPostCountLoading && postCountData?.data && (
+            {!isPostCountLoading && postCountData && (
               <div className="mt-2 text-sm text-gray-500 dark:text-gray-400">
-                총 게시글 수: {postCountData.data.count}개
+                총 게시글 수: {postCountData.count}개
               </div>
             )}
           </div>
@@ -229,7 +229,7 @@ const BoardDetailPage: React.FC = () => {
           <div className="text-center py-10 text-red-500">
             게시글을 불러오는 중 오류가 발생했습니다.
           </div>
-        ) : postsData?.data?.content?.length === 0 ? (
+        ) : postsData?.content?.length === 0 ? (
           <div className="text-center py-16">
             <Card className="py-8">
               <h3 className="text-lg font-medium text-gray-600 dark:text-gray-300 mb-4">게시글이 없습니다</h3>
@@ -272,7 +272,7 @@ const BoardDetailPage: React.FC = () => {
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
-                  {postsData?.data?.content.map((post: Post) => (
+                  {postsData?.content.map((post: Post) => (
                     <tr
                       key={post.id}
                       className="hover:bg-gray-50 dark:hover:bg-gray-750 cursor-pointer"
@@ -292,7 +292,7 @@ const BoardDetailPage: React.FC = () => {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="text-sm text-gray-700 dark:text-gray-300">
-                          {post.author.username}
+                          {post.author.nickname}
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
@@ -301,7 +301,7 @@ const BoardDetailPage: React.FC = () => {
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                        {post.views}
+                        {post.viewCount}
                       </td>
                     </tr>
                   ))}
@@ -310,10 +310,10 @@ const BoardDetailPage: React.FC = () => {
             </div>
 
             {/* 페이지네이션 */}
-            {postsData?.data?.totalPages > 1 && (
+            {postsData?.totalPages && postsData.totalPages > 1 && (
               <Pagination
                 currentPage={currentPage}
-                totalPages={postsData.data.totalPages}
+                totalPages={postsData.totalPages}
                 onPageChange={handlePageChange}
               />
             )}
