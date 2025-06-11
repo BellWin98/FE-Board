@@ -222,7 +222,7 @@ const PostEditPage: React.FC = () => {
 
               <TextArea
                 label="내용"
-                placeholder="내용을 입력하세요 (마크다운 형식을 지원합니다)"
+                placeholder="내용을 입력하세요"
                 rows={15}
                 {...register('content')}
                 error={errors.content?.message}
