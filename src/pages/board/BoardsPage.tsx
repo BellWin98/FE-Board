@@ -273,7 +273,7 @@ const BoardsPage: React.FC = () => {
                   {postsData?.content.map((post: Post) => (
                     <tr
                       key={post.id}
-                      className="hover:bg-gray-50 dark:hover:bg-gray-750 cursor-pointer"
+                      className="hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer"
                       onClick={() => navigate(`/posts/${post.id}`)}
                     >
                       <td className="px-6 py-4 whitespace-nowrap">
