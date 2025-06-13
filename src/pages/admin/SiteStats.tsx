@@ -2,10 +2,22 @@ import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import Spinner from '../../components/ui/Spinner';
 
+interface SiteStats {
+  totalUsers: number;
+  totalPosts: number;
+  totalComments: number;
+  newUsersToday: number;
+  newPostsToday: number;
+  newCommentsToday: number;
+  activeUsers: number;
+  popularCategories: Array<{ id: number; name: string; postCount: number }>;
+  recentActivity: Array<{ type: 'post' | 'comment' | 'user'; nickname: string; action: string; timestamp: string }>;
+}
+
 // 이 컴포넌트에서 사용할 가상의 관리자 API 서비스 (실제 백엔드 구현 시 대체)
 const adminService = {
   // 사이트 통계 데이터 조회 (실제 API 호출로 대체 필요)
-  getSiteStats: async () => {
+  getSiteStats: async (): Promise<{ data: SiteStats }> => {
     // 실제 구현에서는 API 호출
     // 현재는 가상의 데이터 반환
     return new Promise((resolve) => {
@@ -77,7 +89,15 @@ const SiteStats = () => {
     );
   }
 
-  const stats = statsData;
+  if (!statsData) {
+    return (
+      <div className="text-center py-12 text-red-500">
+        통계 데이터를 불러오는 중 오류가 발생했습니다.
+      </div>
+    );
+  }
+
+  const stats = statsData.data;
 
   return (
     <div className="space-y-6">

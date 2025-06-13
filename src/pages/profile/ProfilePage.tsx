@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useAuth } from '../../contexts/AuthContext';
-import Input from '../../components/ui/Input';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
+import { z } from 'zod';
 import Button from '../../components/ui/Button';
 import Card from '../../components/ui/Card';
-import { useNavigate } from 'react-router-dom';
+import Input from '../../components/ui/Input';
+import { useAuth } from '../../contexts/AuthContext';
 
 // 프로필 업데이트 폼 유효성 검사 스키마
 const profileSchema = z.object({

@@ -1,8 +1,8 @@
-import React, { type ReactNode } from 'react';
+import { type ReactNode } from 'react';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import Header from './Header';
 import Footer from './Footer';
+import Header from './Header';
 
 interface LayoutProps {
   children: ReactNode;

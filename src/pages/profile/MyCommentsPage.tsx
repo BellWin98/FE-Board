@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import type { Comment } from '../../types/models';
-import commentService from '../../services/commentService';
-import { useAuth } from '../../contexts/AuthContext';
-import Card from '../../components/ui/Card';
+import { toast } from 'react-toastify';
 import Button from '../../components/ui/Button';
+import Card from '../../components/ui/Card';
 import Pagination from '../../components/ui/Pagination';
 import Spinner from '../../components/ui/Spinner';
-import { toast } from 'react-toastify';
+import { useAuth } from '../../contexts/AuthContext';
+import commentService from '../../services/commentService';
+import type { Comment } from '../../types/models';
 
 const MyCommentsPage = () => {
   const navigate = useNavigate();
@@ -35,11 +35,11 @@ const MyCommentsPage = () => {
   });
 
   // 댓글 삭제 뮤테이션
-  const { mutate: deleteComment, isLoading: isDeleting } = useMutation({
+  const { mutate: deleteComment, isPending: isDeleting } = useMutation({
     mutationFn: (commentId: number) => commentService.deleteComment(commentId),
     onSuccess: () => {
       toast.success('댓글이 삭제되었습니다.');
-      queryClient.invalidateQueries(['myComments', currentPage]);
+      queryClient.invalidateQueries({queryKey: ['myComments', currentPage]});
     },
     onError: () => {
       toast.error('댓글 삭제에 실패했습니다.');
@@ -73,10 +73,10 @@ const MyCommentsPage = () => {
   };
 
   // 텍스트 내용 잘라내기 함수
-  const truncateText = (text: string, maxLength: number) => {
-    if (text.length <= maxLength) return text;
-    return text.slice(0, maxLength) + '...';
-  };
+  // const truncateText = (text: string, maxLength: number) => {
+  //   if (text.length <= maxLength) return text;
+  //   return text.slice(0, maxLength) + '...';
+  // };
 
   // 사용자가 로그인하지 않은 경우 로그인 페이지로 리디렉션
   if (!isAuthenticated) {
@@ -107,7 +107,7 @@ const MyCommentsPage = () => {
           <div className="text-center py-10 text-red-500">
             댓글을 불러오는 중 오류가 발생했습니다.
           </div>
-        ) : commentsData?.data?.content?.length === 0 ? (
+        ) : commentsData?.content?.length === 0 ? (
           <Card className="p-8 text-center">
             <div className="text-gray-500 dark:text-gray-400 mb-4">
               작성한 댓글이 없습니다.
@@ -118,7 +118,7 @@ const MyCommentsPage = () => {
           </Card>
         ) : (
           <div className="space-y-4">
-            {commentsData?.data?.content.map((comment: Comment) => (
+            {commentsData?.content.map((comment: Comment) => (
               <Card key={comment.id} className="p-6">
                 <div className="flex flex-col">
                   <div className="flex items-center justify-between mb-3">
@@ -162,10 +162,10 @@ const MyCommentsPage = () => {
         )}
 
         {/* 페이지네이션 */}
-        {commentsData?.data?.totalPages > 1 && (
+        {commentsData && commentsData.totalPages > 1 && (
           <Pagination
             currentPage={currentPage}
-            totalPages={commentsData.data.totalPages}
+            totalPages={commentsData.totalPages}
             onPageChange={handlePageChange}
           />
         )}

@@ -18,7 +18,7 @@ interface ProtectedRouteProps {
  */
 
 const ProtectedRoute = ({ children, adminOnly = false, fallbackPath = '/'}: ProtectedRouteProps) => {
-  const { isAuthenticated, isAdmin, user, loading } = useAuth();
+  const { isAuthenticated, isAdmin, loading } = useAuth();
   const location = useLocation();
 
   // 인증 정보 로딩 중일 때 로딩 스피너 표시

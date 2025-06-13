@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import type { RegisterRequest } from '../../types/models';
-import { useAuth } from '../../contexts/AuthContext';
-import Input from '../../components/ui/Input';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { Link, useNavigate } from 'react-router-dom';
+import { z } from 'zod';
 import Button from '../../components/ui/Button';
 import Card from '../../components/ui/Card';
+import Input from '../../components/ui/Input';
+import { useAuth } from '../../contexts/AuthContext';
+import type { RegisterRequest } from '../../types/models';
 
 // 회원가입 폼 유효성 검사 스키마
 const registerSchema = z

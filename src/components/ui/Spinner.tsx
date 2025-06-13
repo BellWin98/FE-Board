@@ -1,4 +1,3 @@
-import React from 'react';
 
 // 스피너 컴포넌트 props 타입
 interface SpinnerProps {

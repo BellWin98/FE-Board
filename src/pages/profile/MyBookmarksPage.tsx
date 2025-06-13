@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useEffect, useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import type { Post } from '../../types/models';
-import postService from '../../services/postService';
-import { useAuth } from '../../contexts/AuthContext';
-import Card from '../../components/ui/Card';
-import Button from '../../components/ui/Button';
-import Select from '../../components/ui/Select';
-import Pagination from '../../components/ui/Pagination';
-import Spinner from '../../components/ui/Spinner';
 import { toast } from 'react-toastify';
+import Button from '../../components/ui/Button';
+import Card from '../../components/ui/Card';
+import Pagination from '../../components/ui/Pagination';
+import Select from '../../components/ui/Select';
+import Spinner from '../../components/ui/Spinner';
+import { useAuth } from '../../contexts/AuthContext';
+import postService from '../../services/postService';
+import type { Post } from '../../types/models';
 
 const MyBookmarksPage = () => {
   const navigate = useNavigate();

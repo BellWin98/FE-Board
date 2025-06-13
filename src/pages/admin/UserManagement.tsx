@@ -1,17 +1,27 @@
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import React, { useState } from 'react';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import type { User } from '../../types/models';
+import { toast } from 'react-toastify';
 import Button from '../../components/ui/Button';
 import Input from '../../components/ui/Input';
-import Select from '../../components/ui/Select';
 import Pagination from '../../components/ui/Pagination';
 import Spinner from '../../components/ui/Spinner';
-import { toast } from 'react-toastify';
+import type { User } from '../../types/models';
 
 // 가상의 관리자 사용자 관리 API 서비스
 const adminUserService = {
   // 사용자 목록 조회
-  getUsers: async (page = 0, size = 10, search = '') => {
+  getUsers: async (page = 0, size = 10, search = ''): Promise<{
+    data: {
+      content: User[];
+      totalElements: number;
+      totalPages: number;
+      size: number;
+      number: number;
+      first: boolean;
+      last: boolean;
+      empty: boolean;
+    };
+  }> => {
     // 실제 구현에서는 API 호출
     // 현재는 가상의 데이터 반환
     return new Promise((resolve) => {
@@ -21,8 +31,8 @@ const adminUserService = {
           id: i + 1,
           email: `user${i + 1}@example.com`,
           nickname: `user${i + 1}`,
-          profileImage: null,
-          role: i < 5 ? 'ADMIN' : 'USER',
+          profileImage: undefined,
+          role: (i < 5 ? 'ADMIN' : 'USER') as 'ADMIN' | 'USER',
           createdAt: new Date(2025, 0, 1 + i).toISOString(),
           updatedAt: new Date(2025, 0, 1 + i).toISOString(),
         }));
@@ -98,7 +108,13 @@ const UserManagement = () => {
     data: usersData,
     isLoading,
     error,
-  } = useQuery({
+  } = useQuery<{
+    data: {
+      content: User[];
+      totalElements: number;
+      totalPages: number;
+    };
+  }>({
     queryKey: ['admin', 'users', currentPage, searchTerm],
     queryFn: () => adminUserService.getUsers(currentPage, PAGE_SIZE, searchTerm),
   });
@@ -109,7 +125,7 @@ const UserManagement = () => {
       adminUserService.updateUserRole(userId, role),
     onSuccess: () => {
       toast.success('사용자 역할이 변경되었습니다.');
-      queryClient.invalidateQueries(['admin', 'users']);
+      queryClient.invalidateQueries({ queryKey: ['admin', 'users'] });
     },
     onError: () => {
       toast.error('사용자 역할 변경에 실패했습니다.');
@@ -122,7 +138,7 @@ const UserManagement = () => {
       adminUserService.toggleUserStatus(userId, active),
     onSuccess: (_, variables) => {
       toast.success(`사용자가 ${variables.active ? '활성화' : '비활성화'}되었습니다.`);
-      queryClient.invalidateQueries(['admin', 'users']);
+      queryClient.invalidateQueries({ queryKey: ['admin', 'users'] });
     },
     onError: () => {
       toast.error('사용자 상태 변경에 실패했습니다.');

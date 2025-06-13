@@ -1,19 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import ReactMarkdown from 'react-markdown';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import type { Post, Comment, CreateCommentRequest } from '../../types/models';
-import postService from '../../services/postService';
-import commentService from '../../services/commentService';
-import { useAuth } from '../../contexts/AuthContext';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import ReactMarkdown from 'react-markdown';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { z } from 'zod';
 import Button from '../../components/ui/Button';
 import Card from '../../components/ui/Card';
-import TextArea from '../../components/ui/TextArea';
 import Spinner from '../../components/ui/Spinner';
-import { toast } from 'react-toastify';
+import TextArea from '../../components/ui/TextArea';
+import { useAuth } from '../../contexts/AuthContext';
+import commentService from '../../services/commentService';
+import postService from '../../services/postService';
+import type { Comment, CreateCommentRequest, Post } from '../../types/models';
 
 // 글로벌 동기화 시스템
 const useGlobalViewSync = () => {
@@ -366,6 +366,7 @@ const PostDetailPage = () => {
       toast.success('댓글이 작성되었습니다.');
       reset();
       setReplyTo(null);
+      console.log(createdComment);
       
       // 서버에서 받은 실제 댓글로 교체
       queryClient.invalidateQueries({ queryKey: ['comments', postId] });
@@ -373,6 +374,8 @@ const PostDetailPage = () => {
     },
     onError: (error, newComment, context) => {
       toast.error('댓글 작성에 실패했습니다.');
+      console.error(error);
+      console.log(newComment);
       
       // 실패 시 이전 상태로 롤백
       if (context?.previousPost) {
@@ -395,6 +398,7 @@ const PostDetailPage = () => {
     onMutate: async (commentId) => {
       // 댓글 삭제 시에도 Optimistic Update 적용
       await queryClient.cancelQueries({ queryKey: ['post', postId] });
+      console.log(commentId);
       
       const previousPost = queryClient.getQueryData(['post', postId]);
       
@@ -416,6 +420,8 @@ const PostDetailPage = () => {
     },
     onError: (error, commentId, context) => {
       toast.error('댓글 삭제에 실패했습니다.');
+      console.error(error);
+      console.log(commentId);
       
       // 실패 시 롤백
       if (context?.previousPost) {
@@ -425,7 +431,7 @@ const PostDetailPage = () => {
   });
 
   // 게시글 삭제 뮤테이션
-  const { mutate: deletePost, isLoading: isDeleting } = useMutation({
+  const { mutate: deletePost, isPending: isDeleting } = useMutation({
     mutationFn: () => postService.deletePost(Number(postId)),
     onSuccess: () => {
       toast.success('게시글이 삭제되었습니다.');

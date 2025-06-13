@@ -1,4 +1,3 @@
-import React from 'react';
 
 // 페이지네이션 컴포넌트 props 타입
 interface PaginationProps {

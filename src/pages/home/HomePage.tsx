@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import type { Post, Category } from '../../types/models';
-import postService from '../../services/postService';
-import categoryService from '../../services/categoryService';
-import Card from '../../components/ui/Card';
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import Button from '../../components/ui/Button';
+import Card from '../../components/ui/Card';
 import Spinner from '../../components/ui/Spinner';
+import categoryService from '../../services/categoryService';
+import postService from '../../services/postService';
+import type { Category, Post } from '../../types/models';
 
 const HomePage = () => {
   const [selectedCategory, setSelectedCategory] = useState<number | null>(null);

@@ -13,7 +13,18 @@ import { useNavigate } from 'react-router-dom';
 // 가상의 관리자 게시글 관리 API 서비스
 const adminPostService = {
   // 게시글 목록 조회
-  getPosts: async (page = 0, size = 10, categoryId?: number, search?: string) => {
+  getPosts: async (page = 0, size = 10, categoryId?: number, search?: string): Promise<{
+    data: {
+      content: Post[];
+      totalElements: number;
+      totalPages: number;
+      size: number;
+      number: number;
+      first: boolean;
+      last: boolean;
+      empty: boolean;
+    };
+  }> => {
     // 실제 구현에서는 API 호출
     // 현재는 가상의 데이터 반환
     return new Promise((resolve) => {
@@ -23,7 +34,7 @@ const adminPostService = {
           id: i + 1,
           title: `게시글 제목 ${i + 1}`,
           content: `이것은 게시글 ${i + 1}의 내용입니다. 여기에 게시글 본문이 들어갑니다.`,
-          views: Math.floor(Math.random() * 1000),
+          viewCount: Math.floor(Math.random() * 1000),
           categoryId: (i % 5) + 1,
           category: {
             id: (i % 5) + 1,
@@ -37,8 +48,8 @@ const adminPostService = {
             id: (i % 20) + 1,
             email: `user${(i % 20) + 1}@example.com`,
             nickname: `user${(i % 20) + 1}`,
-            profileImage: null,
-            role: i % 20 < 2 ? 'ADMIN' : 'USER',
+            profileImage: undefined,
+            role: (i % 20 < 2 ? 'ADMIN' : 'USER') as 'ADMIN' | 'USER',
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString(),
           },
@@ -130,7 +141,13 @@ const PostManagement = () => {
     data: postsData,
     isLoading: isPostsLoading,
     error: postsError,
-  } = useQuery({
+  } = useQuery<{
+    data: {
+      content: Post[];
+      totalElements: number;
+      totalPages: number;
+    };
+  }>({
     queryKey: ['admin', 'posts', currentPage, selectedCategory, searchTerm],
     queryFn: () => adminPostService.getPosts(currentPage, PAGE_SIZE, selectedCategory, searchTerm),
   });
@@ -149,7 +166,7 @@ const PostManagement = () => {
     mutationFn: (postId: number) => adminPostService.deletePost(postId),
     onSuccess: () => {
       toast.success('게시글이 삭제되었습니다.');
-      queryClient.invalidateQueries(['admin', 'posts']);
+      queryClient.invalidateQueries({ queryKey: ['admin', 'posts'] });
     },
     onError: () => {
       toast.error('게시글 삭제에 실패했습니다.');
@@ -162,7 +179,7 @@ const PostManagement = () => {
       adminPostService.togglePostVisibility(postId, visible),
     onSuccess: (_, variables) => {
       toast.success(`게시글이 ${variables.visible ? '표시' : '숨김'} 처리되었습니다.`);
-      queryClient.invalidateQueries(['admin', 'posts']);
+      queryClient.invalidateQueries({ queryKey: ['admin', 'posts'] });
     },
     onError: () => {
       toast.error('게시글 상태 변경에 실패했습니다.');
@@ -226,7 +243,7 @@ const PostManagement = () => {
     ? [{ value: '', label: '카테고리 로딩 중...' }]
     : [
         { value: '', label: '모든 카테고리' },
-        ...(categoriesData?.data || []).map((category: Category) => ({
+        ...(categoriesData || []).map((category: Category) => ({
           value: category.id.toString(),
           label: category.name,
         })),
@@ -381,7 +398,7 @@ const PostManagement = () => {
                               d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
                             />
                           </svg>
-                          {post.views}
+                          {post.viewCount}
                         </div>
                         <div className="flex items-center">
                           <svg className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">

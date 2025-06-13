@@ -1,17 +1,17 @@
-import React, { useState } from 'react';
-import { Route, Routes, Link, useNavigate, useLocation } from 'react-router-dom';
-import { useAuth } from '../../contexts/AuthContext';
+import React from 'react';
+import { Link, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import Button from '../../components/ui/Button';
 import Card from '../../components/ui/Card';
+import { useAuth } from '../../contexts/AuthContext';
 
 // 관리자 대시보드 하위 페이지들
 import CategoryManagement from './CategoryManagement';
-import UserManagement from './UserManagement';
 import PostManagement from './PostManagement';
 import SiteStats from './SiteStats';
+import UserManagement from './UserManagement';
 
 const AdminDashboardPage = () => {
-  const { user, isAuthenticated, isAdmin } = useAuth();
+  const { isAuthenticated, isAdmin } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const currentPath = location.pathname;

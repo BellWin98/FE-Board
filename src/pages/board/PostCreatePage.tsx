@@ -1,19 +1,19 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useQuery, useMutation } from '@tanstack/react-query';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import type { CreatePostRequest, Category } from '../../types/models';
-import postService from '../../services/postService';
-import categoryService from '../../services/categoryService';
-import Input from '../../components/ui/Input';
-import TextArea from '../../components/ui/TextArea';
-import Select, { type SelectOption } from '../../components/ui/Select';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { z } from 'zod';
 import Button from '../../components/ui/Button';
 import Card from '../../components/ui/Card';
+import Input from '../../components/ui/Input';
+import { type SelectOption } from '../../components/ui/Select';
 import Spinner from '../../components/ui/Spinner';
-import { toast } from 'react-toastify';
+import TextArea from '../../components/ui/TextArea';
+import categoryService from '../../services/categoryService';
+import postService from '../../services/postService';
+import type { Category, CreatePostRequest } from '../../types/models';
 
 // 게시글 작성 폼 유효성 검사 스키마
 const postSchema = z.object({

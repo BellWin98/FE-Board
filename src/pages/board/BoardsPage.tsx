@@ -1,16 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import type { Post, Category, PageResponse } from '../../types/models';
-import postService from '../../services/postService';
-import categoryService from '../../services/categoryService';
-import Card from '../../components/ui/Card';
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import Button from '../../components/ui/Button';
 import Input from '../../components/ui/Input';
-import Select from '../../components/ui/Select';
 import Pagination from '../../components/ui/Pagination';
+import Select from '../../components/ui/Select';
 import Spinner from '../../components/ui/Spinner';
 import { useAuth } from '../../contexts/AuthContext';
+import categoryService from '../../services/categoryService';
+import postService from '../../services/postService';
+import type { Category, PageResponse, Post } from '../../types/models';
 
 const BoardsPage = () => {
   const { isAuthenticated } = useAuth();
