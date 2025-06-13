@@ -31,12 +31,12 @@ const CategoryManagement = () => {
   });
 
   // 카테고리 생성 뮤테이션
-  const { mutate: createCategory, isLoading: isCreating } = useMutation({
+  const { mutate: createCategory, isPending: isCreating } = useMutation({
     mutationFn: (categoryData: { name: string; description: string }) =>
       categoryService.createCategory(categoryData),
     onSuccess: () => {
       toast.success('카테고리가 생성되었습니다.');
-      queryClient.invalidateQueries(['categories']);
+      queryClient.invalidateQueries({ queryKey: ['categories'] });
       setIsAddMode(false);
       setNewCategory({ name: '', description: '' });
     },
@@ -46,12 +46,12 @@ const CategoryManagement = () => {
   });
 
   // 카테고리 수정 뮤테이션
-  const { mutate: updateCategory, isLoading: isUpdating } = useMutation({
+  const { mutate: updateCategory, isPending: isUpdating } = useMutation({
     mutationFn: ({ id, data }: { id: number; data: { name: string; description: string } }) =>
       categoryService.updateCategory(id, data),
     onSuccess: () => {
       toast.success('카테고리가 수정되었습니다.');
-      queryClient.invalidateQueries(['categories']);
+      queryClient.invalidateQueries({ queryKey: ['categories'] });
       setEditingCategory(null);
     },
     onError: () => {
@@ -60,11 +60,11 @@ const CategoryManagement = () => {
   });
 
   // 카테고리 삭제 뮤테이션
-  const { mutate: deleteCategory, isLoading: isDeleting } = useMutation({
+  const { mutate: deleteCategory, isPending: isDeleting } = useMutation({
     mutationFn: (id: number) => categoryService.deleteCategory(id),
     onSuccess: () => {
       toast.success('카테고리가 삭제되었습니다.');
-      queryClient.invalidateQueries(['categories']);
+      queryClient.invalidateQueries({ queryKey: ['categories'] });
     },
     onError: () => {
       toast.error('카테고리 삭제에 실패했습니다.');
@@ -155,7 +155,7 @@ const CategoryManagement = () => {
     );
   }
 
-  const categories = categoriesData?.data || [];
+  const categories = categoriesData || [];
 
   return (
     <div className="space-y-6">

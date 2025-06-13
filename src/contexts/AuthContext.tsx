@@ -150,7 +150,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
 
     // 관리자는 대시보드로
     if (user.role === 'ADMIN') {
-      return '/admin/boards';
+      return '/admin/categories';
     }
 
     // 일반 유저는 메인 페이지로

@@ -59,9 +59,6 @@ const LoginPage = () => {
         }
         const targetPath = getDefaultRedirectPath(loggedInUser);
         const welcomeMessage = createWelcomeMessage(loggedInUser, targetPath);
-        // const welcomeMessage = targetPath.startsWith('/admin/boards') 
-        //   ? '관리자로 로그인되었습니다. 관리 대시보드로 이동합니다.'
-        //   : `안녕하세요, ${loggedInUser?.nickname}님! 로그인되었습니다.`;
 
         toast.success(welcomeMessage);
 

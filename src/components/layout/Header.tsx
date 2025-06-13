@@ -26,7 +26,7 @@ const Header = () => {
   const handleProfileClick = () => {
     if (isAdmin) {
       // 관리자는 관리 대시보드로
-      navigate('/admin/boards');
+      navigate('/admin/categories');
     } else {
       // 일반 사용자는 프로필 페이지로
       navigate('/profile');
@@ -62,7 +62,7 @@ const Header = () => {
               {/* 🔐 관리자 전용 네비게이션 */}
               {isAdmin && (
                 <Link
-                  to="/admin/boards"
+                  to="/admin/categories"
                   className="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-purple-600 hover:border-purple-300 hover:text-purple-700 dark:text-purple-400 dark:hover:text-purple-300"
                 >
                   <svg className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -225,7 +225,7 @@ const Header = () => {
           {/* 🔐 모바일 관리자 메뉴 */}
           {isAdmin && (
             <Link
-              to="/admin/boards"
+              to="/admin/categories"
               className="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-purple-600 hover:bg-purple-50 hover:border-purple-300 hover:text-purple-800 dark:text-purple-400 dark:hover:bg-purple-900/20 dark:hover:text-purple-300"
               onClick={() => setIsMenuOpen(false)}
             >

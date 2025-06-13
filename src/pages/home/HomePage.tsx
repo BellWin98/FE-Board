@@ -106,7 +106,7 @@ const HomePage = () => {
                   <h3 className="font-semibold text-lg line-clamp-1">{post.title}</h3>
                   <div className="flex items-center text-sm text-gray-500 dark:text-gray-400 mt-1">
                     <span className="bg-primary-100 dark:bg-primary-900 text-primary-800 dark:text-primary-200 px-2 py-0.5 rounded text-xs">
-                      카테고리 이름
+                      {post.category.name}
                     </span>
                     <span className="mx-2">•</span>
                     <span>{post.authorId}</span>

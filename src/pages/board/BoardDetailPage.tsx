@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate, useSearchParams, Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import type { Post, Category, PageResponse } from '../../types/models';
-import postService from '../../services/postService';
-import categoryService from '../../services/categoryService';
-import Input from '../../components/ui/Input';
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import Button from '../../components/ui/Button';
-import Select from '../../components/ui/Select';
-import Pagination from '../../components/ui/Pagination';
-import Spinner from '../../components/ui/Spinner';
 import Card from '../../components/ui/Card';
+import Input from '../../components/ui/Input';
+import Pagination from '../../components/ui/Pagination';
+import Select from '../../components/ui/Select';
+import Spinner from '../../components/ui/Spinner';
 import { useAuth } from '../../contexts/AuthContext';
+import categoryService from '../../services/categoryService';
+import postService from '../../services/postService';
+import type { PageResponse, Post } from '../../types/models';
 
 const BoardDetailPage = () => {
   const { categoryId } = useParams<{ categoryId: string }>();
@@ -46,7 +46,7 @@ const BoardDetailPage = () => {
     }
     
     setSearchParams(params);
-  }, [currentPage, sortBy, searchTerm]);
+  }, [currentPage, sortBy, searchTerm, setSearchParams]);
 
   // 카테고리 정보 조회
   const {
