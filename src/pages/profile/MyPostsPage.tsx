@@ -10,7 +10,7 @@ import Select from '../../components/ui/Select';
 import Pagination from '../../components/ui/Pagination';
 import Spinner from '../../components/ui/Spinner';
 
-const MyPostsPage: React.FC = () => {
+const MyPostsPage = () => {
   const navigate = useNavigate();
   const { user, isAuthenticated } = useAuth();
   const [searchParams, setSearchParams] = useSearchParams();

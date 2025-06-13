@@ -9,7 +9,7 @@ import Spinner from '../../components/ui/Spinner';
 import Card from '../../components/ui/Card';
 import { toast } from 'react-toastify';
 
-const CategoryManagement: React.FC = () => {
+const CategoryManagement = () => {
   const queryClient = useQueryClient();
   
   // 상태 관리

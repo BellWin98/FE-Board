@@ -17,7 +17,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 // 버튼 컴포넌트
-const Button: React.FC<ButtonProps> = ({
+const Button = ({
   children,
   variant = 'primary',
   size = 'md',
@@ -28,7 +28,7 @@ const Button: React.FC<ButtonProps> = ({
   onClick,
   disabled,
   ...rest
-}) => {
+}: ButtonProps) => {
   // 버튼 변형에 따른 클래스
   const variantClasses = {
     primary: 'bg-primary-600 hover:bg-primary-700 text-white',

@@ -28,7 +28,7 @@ const registerSchema = z
 // 회원가입 폼 타입
 type RegisterFormValues = z.infer<typeof registerSchema>;
 
-const RegisterPage: React.FC = () => {
+const RegisterPage = () => {
   const { register: registerUser } = useAuth();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);

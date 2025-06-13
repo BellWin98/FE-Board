@@ -40,7 +40,7 @@ const adminService = {
   }
 };
 
-const SiteStats: React.FC = () => {
+const SiteStats = () => {
   // 사이트 통계 데이터 조회
   const {
     data: statsData,
@@ -253,7 +253,7 @@ interface StatCardProps {
   icon: React.ReactNode;
 }
 
-const StatCard: React.FC<StatCardProps> = ({ title, value, newToday, icon }) => {
+const StatCard = ({ title, value, newToday, icon }: StatCardProps) => {
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
       <div className="flex items-center justify-between">

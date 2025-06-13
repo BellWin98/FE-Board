@@ -12,7 +12,7 @@ import Spinner from '../../components/ui/Spinner';
 import Card from '../../components/ui/Card';
 import { useAuth } from '../../contexts/AuthContext';
 
-const BoardDetailPage: React.FC = () => {
+const BoardDetailPage = () => {
   const { categoryId } = useParams<{ categoryId: string }>();
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();

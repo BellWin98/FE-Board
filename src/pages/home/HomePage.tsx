@@ -8,7 +8,7 @@ import Card from '../../components/ui/Card';
 import Button from '../../components/ui/Button';
 import Spinner from '../../components/ui/Spinner';
 
-const HomePage: React.FC = () => {
+const HomePage = () => {
   const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
 
   // 최신 게시글 조회

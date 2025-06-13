@@ -12,7 +12,8 @@ interface GuestRouteProps {
  * 로그인한 사용자는 홈 페이지로 리디렉션
  * @param children 자식 컴포넌트
  */
-const GuestRoute: React.FC<GuestRouteProps> = ({ children }) => {
+
+const GuestRoute = ({children}: GuestRouteProps) => {
   const { isAuthenticated, loading } = useAuth();
 
   // 인증 정보 로딩 중일 때 로딩 스피너 표시
@@ -30,7 +31,7 @@ const GuestRoute: React.FC<GuestRouteProps> = ({ children }) => {
   }
 
   // 인증되지 않은 사용자인 경우 자식 컴포넌트 렌더링
-  return <>{children}</>;
+  return children;
 };
 
 export default GuestRoute;

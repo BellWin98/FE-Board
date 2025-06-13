@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect, useContext, type ReactNode } from 'react';
+import { createContext, useContext, useEffect, useState, type PropsWithChildren } from 'react';
 
 type Theme = 'light' | 'dark';
 
@@ -14,7 +14,8 @@ const ThemeContext = createContext<ThemeContextType>({
 });
 
 // 컨텍스트 프로바이더 컴포넌트
-export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+
+export const ThemeProvider= ({ children }: PropsWithChildren) => {
   // 로컬 스토리지에서 테마 설정 불러오기 (없으면 시스템 설정 따름)
   const getInitialTheme = (): Theme => {
     // 로컬 스토리지에 저장된 테마 확인

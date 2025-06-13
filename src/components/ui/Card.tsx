@@ -11,14 +11,14 @@ interface CardProps {
 }
 
 // 카드 컴포넌트
-const Card: React.FC<CardProps> = ({
+const Card = ({
   children,
   title,
   subTitle,
   footer,
   hover = true,
   className = '',
-}) => {
+}: CardProps) => {
   return (
     <div
       className={`

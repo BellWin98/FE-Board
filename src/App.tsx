@@ -23,13 +23,13 @@ const AdminDashboardPage = React.lazy(() => import('./pages/admin/AdminDashboard
 const NotFoundPage = React.lazy(() => import('./pages/error/NotFoundPage'));
 
 // 로딩 컴포넌트
-const LoadingFallback: React.FC = () => (
+const LoadingFallback = () => (
   <div className="flex justify-center items-center h-screen">
     <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-primary-500"></div>
   </div>
 );
 
-const App: React.FC = () => {
+const App = () => {
   return (
     <ThemeProvider>
       <AuthProvider>

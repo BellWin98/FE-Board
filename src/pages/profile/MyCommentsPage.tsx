@@ -10,7 +10,7 @@ import Pagination from '../../components/ui/Pagination';
 import Spinner from '../../components/ui/Spinner';
 import { toast } from 'react-toastify';
 
-const MyCommentsPage: React.FC = () => {
+const MyCommentsPage = () => {
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
   const queryClient = useQueryClient();

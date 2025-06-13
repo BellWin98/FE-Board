@@ -9,12 +9,12 @@ interface SpinnerProps {
 }
 
 // 스피너 컴포넌트
-const Spinner: React.FC<SpinnerProps> = ({
+const Spinner = ({
   size = 'md',
   color = 'primary',
   className = '',
   fullScreen = false,
-}) => {
+}: SpinnerProps) => {
   // 크기에 따른 클래스
   const sizeClasses = {
     sm: 'h-4 w-4',

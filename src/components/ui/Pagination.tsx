@@ -11,14 +11,14 @@ interface PaginationProps {
 }
 
 // 페이지네이션 컴포넌트
-const Pagination: React.FC<PaginationProps> = ({
+const Pagination = ({
   currentPage,
   totalPages,
   onPageChange,
   showFirstLastButtons = true,
   siblingCount = 1,
   className = '',
-}) => {
+}: PaginationProps) => {
   // 페이지 배열 생성 (페이지 범위 계산)
   const getPageRange = () => {
     // 시작 페이지와 종료 페이지 계산

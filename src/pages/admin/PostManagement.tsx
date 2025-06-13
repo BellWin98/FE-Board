@@ -116,7 +116,7 @@ const adminPostService = {
   },
 };
 
-const PostManagement: React.FC = () => {
+const PostManagement = () => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState<number>(0);

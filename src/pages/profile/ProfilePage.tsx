@@ -36,7 +36,7 @@ const passwordSchema = z
 // 비밀번호 변경 폼 타입
 type PasswordFormValues = z.infer<typeof passwordSchema>;
 
-const ProfilePage: React.FC = () => {
+const ProfilePage = () => {
   const { user, updateUserProfile, logout } = useAuth();
   const navigate = useNavigate();
   const [isProfileLoading, setIsProfileLoading] = useState(false);

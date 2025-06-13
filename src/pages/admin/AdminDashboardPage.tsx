@@ -10,7 +10,7 @@ import UserManagement from './UserManagement';
 import PostManagement from './PostManagement';
 import SiteStats from './SiteStats';
 
-const AdminDashboardPage: React.FC = () => {
+const AdminDashboardPage = () => {
   const { user, isAuthenticated, isAdmin } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
@@ -161,7 +161,7 @@ interface NavItemProps {
   icon?: React.ReactNode;
 }
 
-const NavItem: React.FC<NavItemProps> = ({ to, children, currentPath, exact = false, icon }) => {
+const NavItem = ({ to, children, currentPath, exact = false, icon }: NavItemProps) => {
   const isActive = exact 
     ? currentPath === to
     : currentPath.startsWith(to);

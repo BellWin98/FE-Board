@@ -26,7 +26,7 @@ const postSchema = z.object({
 // 게시글 수정 폼 타입
 type PostFormValues = z.infer<typeof postSchema>;
 
-const PostEditPage: React.FC = () => {
+const PostEditPage = () => {
   const { postId } = useParams<{ postId: string }>();
   const navigate = useNavigate();
   const { user } = useAuth();

@@ -86,7 +86,7 @@ const adminUserService = {
   },
 };
 
-const UserManagement: React.FC = () => {
+const UserManagement = () => {
   const queryClient = useQueryClient();
   const [currentPage, setCurrentPage] = useState<number>(0);
   const [searchTerm, setSearchTerm] = useState<string>('');

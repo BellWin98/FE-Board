@@ -12,7 +12,7 @@ import Pagination from '../../components/ui/Pagination';
 import Spinner from '../../components/ui/Spinner';
 import { useAuth } from '../../contexts/AuthContext';
 
-const BoardsPage: React.FC = () => {
+const BoardsPage = () => {
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();

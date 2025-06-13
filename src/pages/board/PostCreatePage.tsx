@@ -25,7 +25,7 @@ const postSchema = z.object({
 // 게시글 작성 폼 타입
 type PostFormValues = z.infer<typeof postSchema>;
 
-const PostCreatePage: React.FC = () => {
+const PostCreatePage = () => {
   const navigate = useNavigate();
   const [previewMode, setPreviewMode] = useState<boolean>(false);
 
