@@ -193,7 +193,7 @@ const commentSchema = z.object({
 // 댓글 작성 폼 타입
 type CommentFormValues = z.infer<typeof commentSchema>;
 
-const PostDetailPage: React.FC = () => {
+const PostDetailPage = () => {
   const { postId } = useParams<{ postId: string }>();
   const navigate = useNavigate();
   const { isAuthenticated, user } = useAuth();
@@ -255,10 +255,10 @@ const PostDetailPage: React.FC = () => {
 
   // 게시글 로드 후 조회수 증가 (useEffect 방식)
   useEffect(() => {
-    if (postData && !hasIncremented) {
+    if (postData && !hasIncremented && isAuthenticated) {
       executeViewIncrement();
     }
-  }, [postData, hasIncremented, executeViewIncrement]);
+  }, [postData, hasIncremented, isAuthenticated, executeViewIncrement]);
 
   // 댓글 목록 조회
   const {
