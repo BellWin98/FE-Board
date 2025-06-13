@@ -1,8 +1,7 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import Button from '../../components/ui/Button';
 
-const NotFoundPage: React.FC = () => {
+const NotFoundPage = () => {
   return (
     <div className="flex flex-col items-center justify-center py-16 px-4 text-center">
       <div className="max-w-md">
@@ -12,12 +11,16 @@ const NotFoundPage: React.FC = () => {
           요청하신 페이지가 존재하지 않거나, 이동되었거나, 삭제되었을 수 있습니다.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Button variant="primary" size="lg" as={Link} to="/">
-            홈으로 돌아가기
-          </Button>
-          <Button variant="outline" size="lg" as={Link} to="/boards">
-            게시판 둘러보기
-          </Button>
+          <Link to="/">
+            <Button variant="primary" size="lg">
+              홈으로 돌아가기
+            </Button>
+          </Link>
+          <Link to="/boards">
+            <Button variant="outline" size="lg">
+              게시판 둘러보기
+            </Button>
+          </Link>
         </div>
       </div>
 

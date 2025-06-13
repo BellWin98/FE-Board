@@ -1,7 +1,8 @@
-import React, { createContext, useState, useEffect, useContext, type ReactNode } from 'react';
+import React, { createContext, useState, useEffect, useContext } from 'react';
 import type { User, LoginRequest, RegisterRequest } from '../types/models';
 import authService from '../services/authService';
 import { toast } from 'react-toastify';
+import type { PropsWithChildren } from 'react';
 
 // 인증 컨텍스트 타입 정의
 interface AuthContextType {
@@ -10,10 +11,12 @@ interface AuthContextType {
   error: string | null;
   isAuthenticated: boolean;
   isAdmin: boolean;
+  isUser: boolean;
   login: (credentials: LoginRequest) => Promise<boolean>;
   register: (userData: RegisterRequest) => Promise<boolean>;
   logout: () => void;
   updateUserProfile: (userData: Partial<User>) => Promise<boolean>;
+  getRedirectPath: () => string; // 역할별 리디렉션 경로 반환
 }
 
 // 기본값으로 컨텍스트 생성
@@ -23,14 +26,16 @@ const AuthContext = createContext<AuthContextType>({
   error: null,
   isAuthenticated: false,
   isAdmin: false,
+  isUser: false,
   login: async () => false,
   register: async () => false,
   logout: () => {},
   updateUserProfile: async () => false,
+  getRedirectPath: () => '/',
 });
 
 // 컨텍스트 프로바이더 컴포넌트
-export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+export const AuthProvider = ({ children }: PropsWithChildren) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -80,7 +85,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     try {
       const response = await authService.login(credentials);
       setUser(response.user);
-      toast.success('로그인되었습니다.');
+      // toast.success('로그인되었습니다.');
       return true;
     } catch (err) {
       console.error(err);
@@ -137,23 +142,53 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
   };
 
+  // 역할별 리디렉션 경로 결정
+  const getRedirectPath = (): string => {
+    if (!user) {
+      return '/';
+    }
+
+    // 관리자는 대시보드로
+    if (user.role === 'ADMIN') {
+      return '/admin/boards';
+    }
+
+    // 일반 유저는 메인 페이지로
+    return '/';
+  };
+
+  // 계산된 속성들
+  const isAuthenticated = !!user;
+  const isAdmin = user?.role === 'ADMIN';
+  const isUser = user?.role === 'USER';
+
   // 컨텍스트 값 정의
   const value = {
     user,
     loading,
     error,
-    isAuthenticated: !!user,
-    isAdmin: user?.role === 'ADMIN',
+    isAuthenticated,
+    isAdmin,
+    isUser,
     login,
     register,
     logout,
     updateUserProfile,
+    getRedirectPath,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
 // 커스텀 훅 - 인증 컨텍스트 사용을 위한 편의 함수
-export const useAuth = () => useContext(AuthContext);
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  
+  return context;
+}
+
 
 export default AuthContext;

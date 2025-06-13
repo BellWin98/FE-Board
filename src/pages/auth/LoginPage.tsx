@@ -1,13 +1,16 @@
-import React, { useState } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import type { LoginRequest } from '../../types/models';
-import { useAuth } from '../../contexts/AuthContext';
-import Input from '../../components/ui/Input';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { z } from 'zod';
 import Button from '../../components/ui/Button';
 import Card from '../../components/ui/Card';
+import Input from '../../components/ui/Input';
+import { useAuth } from '../../contexts/AuthContext';
+import authService from '../../services/authService';
+import type { LoginRequest } from '../../types/models';
+import { createWelcomeMessage, getDefaultRedirectPath } from '../../utils/redirectUtils';
 
 // 로그인 폼 유효성 검사 스키마
 const loginSchema = z.object({
@@ -18,14 +21,10 @@ const loginSchema = z.object({
 // 로그인 폼 타입
 type LoginFormValues = z.infer<typeof loginSchema>;
 
-const LoginPage: React.FC = () => {
+const LoginPage = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
-  const location = useLocation();
   const [isLoading, setIsLoading] = useState(false);
-
-  // 리디렉션 경로 설정 (로그인 후 이전 페이지로 돌아가기 위함)
-  const from = (location.state as any)?.from?.pathname || '/';
 
   // React Hook Form 초기화
   const {
@@ -53,13 +52,31 @@ const LoginPage: React.FC = () => {
       const success = await login(loginData);
       
       if (success) {
-        navigate(from, { replace: true });
+        // 로그인 성공 시 사용자 정보 가져와서 리디렉션 설정
+        const loggedInUser = authService.getUser();
+        if (!loggedInUser) {
+          throw new Error('로그인 후 사용자 정보를 가져올 수 없습니다.');
+        }
+        const targetPath = getDefaultRedirectPath(loggedInUser);
+        const welcomeMessage = createWelcomeMessage(loggedInUser, targetPath);
+        // const welcomeMessage = targetPath.startsWith('/admin/boards') 
+        //   ? '관리자로 로그인되었습니다. 관리 대시보드로 이동합니다.'
+        //   : `안녕하세요, ${loggedInUser?.nickname}님! 로그인되었습니다.`;
+
+        toast.success(welcomeMessage);
+
+        // 약간의 지연 후 리디렉션 (사용자가 메시지를 볼 수 있도록)
+        setTimeout(() => {
+          navigate(targetPath, { replace: true });
+        }, 800);
+
       } else {
         setError('root', {
           message: '로그인에 실패했습니다. 이메일과 비밀번호를 확인해주세요.',
         });
       }
     } catch (error) {
+      console.error('로그인 에러:', error);
       setError('root', {
         message: '로그인 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.',
       });
