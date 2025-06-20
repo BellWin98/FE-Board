@@ -9,7 +9,7 @@ export interface SelectOption {
 // 셀렉트 컴포넌트 props 타입
 interface SelectProps extends Omit<SelectHTMLAttributes<HTMLSelectElement>, 'onChange'> {
   label?: string;
-  options: SelectOption[];
+  options?: SelectOption[];
   error?: string;
   fullWidth?: boolean;
   className?: string;
@@ -18,7 +18,7 @@ interface SelectProps extends Omit<SelectHTMLAttributes<HTMLSelectElement>, 'onC
 
 // 셀렉트 컴포넌트 (forwardRef를 사용하여 ref 전달)
 const Select = forwardRef<HTMLSelectElement, SelectProps>(
-  ({ label, options, error, fullWidth = true, className = '', onChange, ...rest }, ref) => {
+  ({ label, options = [], error, fullWidth = true, className = '', onChange, ...rest }, ref) => {
     const widthClass = fullWidth ? 'w-full' : '';
     const errorClass = error ? 'border-red-500 focus:ring-red-500 focus:border-red-500' : '';
 
@@ -51,11 +51,11 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>(
           onChange={handleChange}
           {...rest}
         >
-          {options.map((option) => (
+          {options?.map((option) => (
             <option key={option.value} value={option.value}>
               {option.label}
             </option>
-          ))}
+          )) || []}
         </select>
         {error && <p className="mt-1 text-xs text-red-500">{error}</p>}
       </div>
