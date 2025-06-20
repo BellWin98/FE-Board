@@ -117,3 +117,102 @@ export interface User {
     post: Post;
     createdAt: string;
   }
+
+  // 친구 관계 모델
+  export interface Friend {
+    id: number;
+    requester: User;
+    requesterId: number;
+    addressee: User;
+    addresseeId: number;
+    status: 'PENDING' | 'ACCEPTED' | 'REJECTED';
+    createdAt: string;
+    updatedAt: string;
+  }
+
+  // 친구 요청 모델
+  export interface FriendRequest {
+    email: string;
+    message?: string;
+  }
+
+  // 챌린지 모델
+  export interface Challenge {
+    id: number;
+    title: string;
+    description: string;
+    category: string;
+    goalAmount: number;
+    betAmount: number;
+    startDate: string;
+    endDate: string;
+    status: 'RECRUITING' | 'IN_PROGRESS' | 'COMPLETED' | 'CANCELLED';
+    verificationMethod: 'PHOTO' | 'TEXT' | 'MUTUAL' | 'ADMIN';
+    maxParticipants: number;
+    creator: User;
+    creatorId: number;
+    participants: ChallengeParticipant[];
+    totalPot: number;
+    successRate: number;
+    createdAt: string;
+    updatedAt: string;
+  }
+
+  // 챌린지 참가자 모델
+  export interface ChallengeParticipant {
+    id: number;
+    challengeId: number;
+    user: User;
+    userId: number;
+    betAmount: number;
+    status: 'ACTIVE' | 'SUCCESS' | 'FAILED' | 'PENDING_VERIFICATION';
+    joinedAt: string;
+    progress: ChallengeProgress[];
+  }
+
+  // 챌린지 진행상황 모델
+  export interface ChallengeProgress {
+    id: number;
+    participantId: number;
+    participant: ChallengeParticipant;
+    date: string;
+    completed: boolean;
+    proof?: string; // 인증 사진 URL 또는 텍스트
+    verifiedBy?: User;
+    verificationStatus: 'PENDING' | 'VERIFIED' | 'REJECTED';
+    createdAt: string;
+  }
+
+  // 챌린지 생성 요청 모델
+  export interface CreateChallengeRequest {
+    title: string;
+    description: string;
+    category: string;
+    goalAmount: number;
+    betAmount: number;
+    startDate: string;
+    endDate: string;
+    verificationMethod: 'PHOTO' | 'TEXT' | 'MUTUAL' | 'ADMIN';
+    maxParticipants: number;
+    invitedFriends: number[];
+  }
+
+  // 챌린지 참가 요청 모델
+  export interface JoinChallengeRequest {
+    challengeId: number;
+    betAmount: number;
+  }
+
+  // 챌린지 진행상황 제출 모델
+  export interface SubmitProgressRequest {
+    challengeId: number;
+    completed: boolean;
+    proof?: string;
+  }
+
+  // 진행상황 검증 요청 모델
+  export interface VerifyProgressRequest {
+    progressId: number;
+    verified: boolean;
+    comment?: string;
+  }

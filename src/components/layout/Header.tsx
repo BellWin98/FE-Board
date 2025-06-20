@@ -45,7 +45,7 @@ const Header = () => {
                 게시판
               </Link>
             </div>
-            
+
             <nav className="hidden sm:ml-6 sm:flex sm:space-x-8">
               <Link
                 to="/"
@@ -53,6 +53,20 @@ const Header = () => {
               >
                 홈
               </Link>
+              <Link
+                to="/challenges"
+                className="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700 dark:text-gray-300 dark:hover:text-white"
+              >
+                챌린지
+              </Link>
+              {isAuthenticated && (
+                <Link
+                  to="/friends"
+                  className="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700 dark:text-gray-300 dark:hover:text-white"
+                >
+                  친구
+                </Link>
+              )}
               <Link
                 to="/boards"
                 className="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700 dark:text-gray-300 dark:hover:text-white"
@@ -274,7 +288,7 @@ const Header = () => {
                   </svg>
                 )}
               </button>
-              
+
               {/* 사용자 정보 표시 */}
               {isAuthenticated && user && (
                 <div className="ml-3">

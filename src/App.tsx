@@ -22,6 +22,11 @@ const MyBookmarksPage = React.lazy(() => import('./pages/profile/MyBookmarksPage
 const AdminDashboardPage = React.lazy(() => import('./pages/admin/AdminDashboardPage'));
 const NotFoundPage = React.lazy(() => import('./pages/error/NotFoundPage'));
 
+// PlanBet Pages (지연 로딩 적용)
+const FriendsPage = React.lazy(() => import('./pages/friends/FriendsPage'));
+const ChallengesPage = React.lazy(() => import('./pages/challenges/ChallengesPage'));
+const CreateChallengePage = React.lazy(() => import('./pages/challenges/CreateChallengePage'));
+
 // 로딩 컴포넌트
 const LoadingFallback = () => (
   <div className="flex justify-center items-center h-screen">
@@ -42,7 +47,7 @@ const App = () => {
                 <Route path="/boards" element={<BoardsPage />} />
                 <Route path="/boards/:categoryId" element={<BoardDetailPage />} />
                 <Route path="/posts/:postId" element={<PostDetailPage />} />
-                
+
                 {/* 게스트 전용 라우트 */}
                 <Route
                   path="/login"
@@ -60,7 +65,7 @@ const App = () => {
                     </GuestRoute>
                   }
                 />
-                
+
                 {/* 인증 사용자 전용 라우트 */}
                 <Route
                   path="/profile"
@@ -110,7 +115,26 @@ const App = () => {
                     </ProtectedRoute>
                   }
                 />
-                
+
+                 {/* PlanBet 페이지 */}
+                 <Route
+                  path="/friends"
+                  element={
+                    <ProtectedRoute>
+                      <FriendsPage />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route path="/challenges" element={<ChallengesPage />} />
+                <Route
+                  path="/challenges/create"
+                  element={
+                    <ProtectedRoute>
+                      <CreateChallengePage />
+                    </ProtectedRoute>
+                  }
+                />
+
                 {/* 관리자 전용 라우트 */}
                 <Route
                   path="/admin/*"
@@ -120,10 +144,10 @@ const App = () => {
                     </ProtectedRoute>
                   }
                 />
-                
+
                 {/* 404 페이지 */}
                 <Route path="/404" element={<NotFoundPage />} />
-                
+
                 {/* 알 수 없는 경로는 404 페이지로 리디렉션 */}
                 <Route path="*" element={<Navigate to="/404" replace />} />
               </Routes>
