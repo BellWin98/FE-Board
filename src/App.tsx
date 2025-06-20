@@ -26,6 +26,7 @@ const NotFoundPage = React.lazy(() => import('./pages/error/NotFoundPage'));
 const FriendsPage = React.lazy(() => import('./pages/friends/FriendsPage'));
 const ChallengesPage = React.lazy(() => import('./pages/challenges/ChallengesPage'));
 const CreateChallengePage = React.lazy(() => import('./pages/challenges/CreateChallengePage'));
+import ChallengeDetailPage from './pages/challenges/ChallengeDetailPage';
 
 // 로딩 컴포넌트
 const LoadingFallback = () => (
@@ -133,6 +134,14 @@ const App = () => {
                       <CreateChallengePage />
                     </ProtectedRoute>
                   }
+                />
+                <Route 
+                  path="/challenges/:id" 
+                  element={
+                    <ProtectedRoute>
+                      <ChallengeDetailPage />
+                    </ProtectedRoute>
+                  } 
                 />
 
                 {/* 관리자 전용 라우트 */}

@@ -148,17 +148,18 @@ const CreateChallengePage = () => {
                 카테고리 *
               </label>
               <Select
+                options={[
+                  { value: '', label: '카테고리 선택' },
+                  { value: '운동', label: '운동' },
+                  { value: '학습', label: '학습' },
+                  { value: '취미', label: '취미' },
+                  { value: '업무', label: '업무' },
+                  { value: '기타', label: '기타' }
+                ]}
                 value={formData.category}
-                onChange={(e) => handleInputChange('category', e.target.value)}
+                onChange={(value) => handleInputChange('category', value)}
                 required
-              >
-                <option value="">카테고리 선택</option>
-                <option value="운동">운동</option>
-                <option value="학습">학습</option>
-                <option value="취미">취미</option>
-                <option value="업무">업무</option>
-                <option value="기타">기타</option>
-              </Select>
+              />
             </div>
 
             <div>
@@ -166,15 +167,16 @@ const CreateChallengePage = () => {
                 검증 방법 *
               </label>
               <Select
+                options={[
+                  { value: 'MUTUAL', label: '상호 검증' },
+                  { value: 'PHOTO', label: '사진 인증' },
+                  { value: 'TEXT', label: '텍스트 인증' },
+                  { value: 'ADMIN', label: '관리자 검증' }
+                ]}
                 value={formData.verificationMethod}
-                onChange={(e) => handleInputChange('verificationMethod', e.target.value)}
+                onChange={(value) => handleInputChange('verificationMethod', value)}
                 required
-              >
-                <option value="MUTUAL">상호 검증</option>
-                <option value="PHOTO">사진 인증</option>
-                <option value="TEXT">텍스트 인증</option>
-                <option value="ADMIN">관리자 검증</option>
-              </Select>
+              />
             </div>
           </div>
         </Card>
