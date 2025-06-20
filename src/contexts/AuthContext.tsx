@@ -16,6 +16,7 @@ interface AuthContextType {
   register: (userData: RegisterRequest) => Promise<boolean>;
   logout: () => void;
   updateUserProfile: (userData: Partial<User>) => Promise<boolean>;
+  deleteAccount: () => Promise<boolean>;
   getRedirectPath: () => string; // 역할별 리디렉션 경로 반환
 }
 
@@ -31,6 +32,7 @@ const AuthContext = createContext<AuthContextType>({
   register: async () => false,
   logout: () => {},
   updateUserProfile: async () => false,
+  deleteAccount: async () => false,
   getRedirectPath: () => '/',
 });
 
@@ -142,6 +144,26 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
     }
   };
 
+  // 회원탈퇴 함수
+  const deleteAccount = async (): Promise<boolean> => {
+    setLoading(true);
+    setError(null);
+    try {
+      await authService.deleteAccount();
+      setUser(null);
+      toast.success('계정이 성공적으로 삭제되었습니다.');
+      
+      return true;
+    } catch (err) {
+      console.error(err);
+      setError('계정 삭제에 실패했습니다.');
+
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  }
+
   // 역할별 리디렉션 경로 결정
   const getRedirectPath = (): string => {
     if (!user) {
@@ -174,6 +196,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
     register,
     logout,
     updateUserProfile,
+    deleteAccount,
     getRedirectPath,
   };
 

@@ -37,7 +37,7 @@ const passwordSchema = z
 type PasswordFormValues = z.infer<typeof passwordSchema>;
 
 const ProfilePage = () => {
-  const { user, updateUserProfile, logout } = useAuth();
+  const { user, updateUserProfile, deleteAccount } = useAuth();
   const navigate = useNavigate();
   const [isProfileLoading, setIsProfileLoading] = useState(false);
   const [isPasswordLoading, setIsPasswordLoading] = useState(false);
@@ -118,12 +118,19 @@ const ProfilePage = () => {
   };
 
   // 계정 삭제 핸들러
-  const handleDeleteAccount = () => {
-    if (window.confirm('정말로 계정을 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.')) {
-      // 계정 삭제 로직 구현 (API 호출)
-      // 성공 시 로그아웃 및 홈으로 리디렉션
-      logout();
-      navigate('/');
+  const handleDeleteAccount = async () => {
+    const confirmMessage = '정말로 계정을 삭제하시겠습니까?\n\n이 작업은 되돌릴 수 없으며, 다음 데이터가 모두 삭제됩니다:\n- 프로필 정보\n- 작성한 게시글\n- 작성한 댓글\n- 북마크\n\n계속하시겠습니까?';
+
+    if (window.confirm(confirmMessage)) {
+      try {
+        const success = await deleteAccount();
+        if (success) {
+          // 성공 시 홈으로 리디렉션 (AuthContext에서 이미 로그아웃 처리됨)
+          navigate('/');
+        }
+      } catch (error) {
+        console.error('계정 삭제 오류 발생', error);
+      }
     }
   };
 

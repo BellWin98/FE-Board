@@ -67,6 +67,13 @@ export const authService = {
     const user = this.getUser();
     return user?.role === 'ADMIN';
   },
+
+  // 회원탈퇴
+  async deleteAccount(): Promise<void> {
+    await apiClient.delete('/auth/account');
+    // 계정 삭제 후 로컬 스토리지 정리
+    this.logout();
+  }
 };
 
 export default authService;
