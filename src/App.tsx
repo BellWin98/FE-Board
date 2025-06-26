@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 import { ThemeProvider } from './contexts/ThemeContext';
+import { PortfolioProvider } from './contexts/PortfolioContext';
 import Layout from './components/layout/Layout';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import GuestRoute from './components/auth/GuestRoute';
@@ -22,6 +23,11 @@ const MyBookmarksPage = React.lazy(() => import('./pages/profile/MyBookmarksPage
 const AdminDashboardPage = React.lazy(() => import('./pages/admin/AdminDashboardPage'));
 const NotFoundPage = React.lazy(() => import('./pages/error/NotFoundPage'));
 
+// 새로운 포트폴리오 관련 페이지들
+const PortfolioDashboard = React.lazy(() => import('./pages/dashboard/PortfolioDashboard'));
+const StockDetail = React.lazy(() => import('./pages/portfolio/StockDetail'));
+const AddStock = React.lazy(() => import('./pages/portfolio/AddStock'));
+
 // 로딩 컴포넌트
 const LoadingFallback = () => (
   <div className="flex justify-center items-center h-screen">
@@ -33,103 +39,155 @@ const App = () => {
   return (
     <ThemeProvider>
       <AuthProvider>
-        <Router>
-          <Layout>
-            <React.Suspense fallback={<LoadingFallback />}>
-              <Routes>
-                {/* 공개 접근 가능 라우트 */}
-                <Route path="/" element={<HomePage />} />
-                <Route path="/boards" element={<BoardsPage />} />
-                <Route path="/boards/:categoryId" element={<BoardDetailPage />} />
-                <Route path="/posts/:postId" element={<PostDetailPage />} />
-                
-                {/* 게스트 전용 라우트 */}
-                <Route
-                  path="/login"
-                  element={
-                    <GuestRoute>
-                      <LoginPage />
-                    </GuestRoute>
-                  }
-                />
-                <Route
-                  path="/register"
-                  element={
-                    <GuestRoute>
-                      <RegisterPage />
-                    </GuestRoute>
-                  }
-                />
-                
-                {/* 인증 사용자 전용 라우트 */}
-                <Route
-                  path="/profile"
-                  element={
-                    <ProtectedRoute>
-                      <ProfilePage />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/post/create"
-                  element={
-                    <ProtectedRoute>
-                      <PostCreatePage />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/post/edit/:postId"
-                  element={
-                    <ProtectedRoute>
-                      <PostEditPage />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/my-posts"
-                  element={
-                    <ProtectedRoute>
-                      <MyPostsPage />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/my-comments"
-                  element={
-                    <ProtectedRoute>
-                      <MyCommentsPage />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/my-bookmarks"
-                  element={
-                    <ProtectedRoute>
-                      <MyBookmarksPage />
-                    </ProtectedRoute>
-                  }
-                />
-                
-                {/* 관리자 전용 라우트 */}
-                <Route
-                  path="/admin/*"
-                  element={
-                    <ProtectedRoute adminOnly>
-                      <AdminDashboardPage />
-                    </ProtectedRoute>
-                  }
-                />
-                
-                {/* 404 페이지 */}
-                <Route path="/404" element={<NotFoundPage />} />
-                
-                {/* 알 수 없는 경로는 404 페이지로 리디렉션 */}
-                <Route path="*" element={<Navigate to="/404" replace />} />
-              </Routes>
-            </React.Suspense>
-          </Layout>
-        </Router>
+        {/* <PortfolioProvider> */}
+          <Router>
+            <Layout>
+              <React.Suspense fallback={<LoadingFallback />}>
+                <Routes>
+                  {/* 공개 접근 가능 라우트 */}
+                  <Route path="/" element={<HomePage />} />
+                  <Route path="/boards" element={<BoardsPage />} />
+                  <Route path="/boards/:categoryId" element={<BoardDetailPage />} />
+                  <Route path="/posts/:postId" element={<PostDetailPage />} />
+                  
+                  {/* 게스트 전용 라우트 */}
+                  <Route
+                    path="/login"
+                    element={
+                      <GuestRoute>
+                        <LoginPage />
+                      </GuestRoute>
+                    }
+                  />
+                  <Route
+                    path="/register"
+                    element={
+                      <GuestRoute>
+                        <RegisterPage />
+                      </GuestRoute>
+                    }
+                  />
+
+                  {/* 포트폴리오 관련 라우트 */}
+                  <Route
+                    path="/portfolio"
+                    element={
+                      <ProtectedRoute>
+                        <PortfolioDashboard />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/portfolio/add"
+                    element={
+                      <ProtectedRoute>
+                        <AddStock />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/portfolio/detail/:holdingId"
+                    element={
+                      <ProtectedRoute>
+                        <StockDetail />
+                      </ProtectedRoute>
+                    }
+                  />
+                  {/* <Route
+                    path="/portfolio/transactions/:symbol?"
+                    element={
+                      <ProtectedRoute>
+                        <TransactionHistory />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/portfolio/alerts"
+                    element={
+                      <ProtectedRoute>
+                        <AlertSettings />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/portfolio/analysis"
+                    element={
+                      <ProtectedRoute>
+                        <PortfolioAnalysis />
+                      </ProtectedRoute>
+                    }
+                  />                   */}
+                  
+                  {/* 인증 사용자 전용 라우트 */}
+                  <Route
+                    path="/profile"
+                    element={
+                      <ProtectedRoute>
+                        <ProfilePage />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/post/create"
+                    element={
+                      <ProtectedRoute>
+                        <PostCreatePage />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/post/edit/:postId"
+                    element={
+                      <ProtectedRoute>
+                        <PostEditPage />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/my-posts"
+                    element={
+                      <ProtectedRoute>
+                        <MyPostsPage />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/my-comments"
+                    element={
+                      <ProtectedRoute>
+                        <MyCommentsPage />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/my-bookmarks"
+                    element={
+                      <ProtectedRoute>
+                        <MyBookmarksPage />
+                      </ProtectedRoute>
+                    }
+                  />
+                  
+                  {/* 관리자 전용 라우트 */}
+                  <Route
+                    path="/admin/*"
+                    element={
+                      <ProtectedRoute adminOnly>
+                        <AdminDashboardPage />
+                      </ProtectedRoute>
+                    }
+                  />
+                  
+                  {/* 404 페이지 */}
+                  <Route path="/404" element={<NotFoundPage />} />
+                  
+                  {/* 알 수 없는 경로는 404 페이지로 리디렉션 */}
+                  <Route path="*" element={<Navigate to="/404" replace />} />
+                </Routes>
+              </React.Suspense>
+            </Layout>
+          </Router>
+        {/* </PortfolioProvider> */}
       </AuthProvider>
     </ThemeProvider>
   );
