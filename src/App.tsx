@@ -5,6 +5,7 @@ import { ThemeProvider } from './contexts/ThemeContext';
 import Layout from './components/layout/Layout';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import GuestRoute from './components/auth/GuestRoute';
+import NotificationHandler from './components/common/NotificationHandler';
 
 // 페이지 컴포넌트 (지연 로딩 적용)
 const HomePage = React.lazy(() => import('./pages/home/HomePage'));
@@ -34,6 +35,7 @@ const App = () => {
     <ThemeProvider>
       <AuthProvider>
         <Router>
+          <NotificationHandler />
           <Layout>
             <React.Suspense fallback={<LoadingFallback />}>
               <Routes>
