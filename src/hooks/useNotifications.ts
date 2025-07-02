@@ -29,7 +29,7 @@ export const useNotifications = () => {
             const client = new Client({
                 webSocketFactory: () => {
                     // SockJS를 WebSocket처럼 사용
-                    return new SockJS(`${API_WS_URL}/ws`);
+                    return new SockJS(`${API_WS_URL}/wss`);
                 },
                 connectHeaders: {
                     Authorization: `Bearer ${token}`
